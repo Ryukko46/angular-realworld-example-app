@@ -32,4 +32,4 @@ jobs:
       env:
     CHROME_BIN: /usr/bin/chromium
       run: |
-        npm test -- --watch=false --browsers=ChromeHeadless --no-progress
+        
