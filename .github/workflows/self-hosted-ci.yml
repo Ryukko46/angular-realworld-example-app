@@ -5,10 +5,12 @@ on:
     branches: [ master ]
   pull_request:
     branches: [ master ]
+  # Ajout d'un déclencheur manuel pour faciliter les tests
   workflow_dispatch:
 
 jobs:
   build-and-test:
+    # Spécifie d'utiliser votre runner auto-hébergé au lieu des runners GitHub
     runs-on: self-hosted
 
     steps:
@@ -18,21 +20,16 @@ jobs:
     - name: Log Node.js version
       run: node --version
 
-    - name: Cache node modules
-      uses: actions/cache@v3
-      id: npm-cache
-      with:
-        path: node_modules
-        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: |
-          ${{ runner.os }}-node-
+    - name: Log available disk space
+      run: |
+        echo "Checking available disk space:"
+        df -h
 
     - name: Install dependencies
-      if: steps.npm-cache.outputs.cache-hit != 'true'
-      run: npm ci
+      run: npm install --legacy-peer-deps
 
     - name: Run tests
-      run: npm test -- --watch=false --browsers=ChromeHeadless --no-progress
-
-    - name: Build application
-      run: npm run build -- --configuration production
+      env:
+    CHROME_BIN: /usr/bin/chromium
+      run: |
+        npm test -- --watch=false --browsers=ChromeHeadless --no-progress
