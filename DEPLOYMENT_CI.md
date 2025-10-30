@@ -14,3 +14,4 @@ Ce document décrit comment configurer le déploiement automatisé via GitHub Ac
 - Compte GitHub
 - Docker Hub
 - Serveur de production
+Ligne ajoutée par master
